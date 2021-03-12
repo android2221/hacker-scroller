@@ -1,5 +1,5 @@
 // Import Swiper React components
-import SwiperCore, { Navigation, Pagination } from 'swiper';
+import SwiperCore, { Navigation, Pagination, Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import React, { Component } from "react";
 
@@ -8,7 +8,7 @@ import 'swiper/swiper.scss';
 import './Slider.scss';
 
 // install Swiper modules
-SwiperCore.use([Navigation, Pagination]);
+SwiperCore.use([Navigation, Pagination, Virtual]);
 
 class Slider extends Component{
     constructor(){
@@ -24,24 +24,26 @@ class Slider extends Component{
 
     render() {
 
-        const list = this.state.topStories.map(story => <SwiperSlide><div className="hacker-card">{story}</div></SwiperSlide> );
+        if( this.state.topStories.length > 0){
+            const list = this.state.topStories.map(story => <SwiperSlide key={story} id={story}><div className="hacker-card">{story}</div></SwiperSlide> );
 
-        return (
-            <div className='sliderContainer'>
-                
-                <Swiper
-                    spaceBetween={50}
-                    slidesPerView={1}
-                    navigation
-                    pagination={{ clickable: true }}
-                    onSlideChange={() => console.log('slide change')}
-                    onSwiper={(swiper) => console.log(swiper)}
-                    loop={true}>
-                    {list}
-                </Swiper>
-            </div>
-
-        );
+            return (
+                <div className='sliderContainer'>
+                    
+                    <Swiper
+                        spaceBetween={50}
+                        slidesPerView={1}
+                        navigation
+                        pagination={{ clickable: true }}
+                        onSlideChange={() => console.log('slide change')}
+                        onSwiper={(swiper) => console.log(swiper)}>
+                        {list}
+                    </Swiper>
+                </div>
+    
+            );
+        }
+        return("Nothing here")
         }
 }
 
