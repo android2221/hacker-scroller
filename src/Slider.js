@@ -33,11 +33,13 @@ class Slider extends Component{
     render() {
         console.log('render!');
         if( this.state.storyData.length > 0){
-            const list = this.state.storyData.map(story => <SwiperSlide key={story.id} id={story.id}><div className="hacker-card">{story.title}</div></SwiperSlide> );
+            const list = this.state.storyData.map(story => {
+                return <SwiperSlide key={story.id} id={story.id}><div className="hacker-card">{story.title}</div></SwiperSlide>
+            });
             console.log('logging list');
             console.log(list);
             return (
-                <div className='sliderContainer'>
+                <div className='slider-container'>
                     <Swiper
                         spaceBetween={50}
                         slidesPerView={1}
