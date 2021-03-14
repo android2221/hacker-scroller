@@ -11,16 +11,17 @@ import './Slider.scss';
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination, Virtual]);
 
-class Slider extends Component{
-    constructor(){
+class Slider extends Component {
+    constructor() {
         super();
-        this.state = { topStories: [], 
-                       storyData: [], 
-                       currentStoriesSlice: [],
-                       currentOffset: 10, 
-                       storiesToLoad: 10,
-                       loading: true,
-                    }
+        this.state = {
+            topStories: [],
+            storyData: [],
+            currentStoriesSlice: [],
+            currentOffset: 10,
+            storiesToLoad: 10,
+            loading: true,
+        }
     }
 
     async componentDidMount() {
@@ -34,18 +35,41 @@ class Slider extends Component{
             return result.json();
         }));
 
-        this.setState({topStories: topStoriesJson, 
-                       storyData: storyDataArray, 
-                       currentStoriesSlice: currentStoriesSlice,
-                       loading: false
-                      });
+        this.setState({
+            topStories: topStoriesJson,
+            storyData: storyDataArray,
+            currentStoriesSlice: currentStoriesSlice,
+            loading: false
+        });
     }
 
     render() {
-        console.log('render!');
-        if( this.state.storyData.length > 0){
+        if (this.state.storyData.length > 0) {
             const list = this.state.storyData.map(story => {
-                return <SwiperSlide key={story.id} id={story.id}><div className="hacker-card">{story.title}</div></SwiperSlide>
+                // Handle things that don't have a URL
+                // Go to hacker news if not
+
+                var calculatedUrl;
+                var displayUrl;
+
+                if (story.url) {
+                    var urlParts = story.url.split('/');
+                    calculatedUrl = story.url;
+                    displayUrl = urlParts[2];
+                }
+
+                return (
+                    <SwiperSlide key={story.id} id={story.id}>
+                        <div className="hacker-card">
+                            <div class='story-title'>
+                                <a href={story.url}>
+                                    {story.title}
+                                </a>
+                            </div>
+                            <div class='story-url'>{displayUrl}</div>
+                        </div>
+                    </SwiperSlide>
+                )
             });
             return (
                 <div className='slider-container'>
@@ -64,12 +88,12 @@ class Slider extends Component{
                 </div>
             );
         }
-            return(
-                <div id='loading-icon' className='loading'>
-                    <ClipLoader size={35} color='black' loading={this.state.loading} />
-                </div>
-            );
-        }
+        return (
+            <div id='loading-icon' className='loading'>
+                <ClipLoader size={35} color='black' loading={this.state.loading} />
+            </div>
+        );
+    }
 }
 
 export default Slider;
