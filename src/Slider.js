@@ -18,39 +18,26 @@ class Slider extends Component{
 
     async componentDidMount() {
 
-        const topStories = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json`);
-        console.log("TOP STORIES");
-        console.log(await topStories.json());
+        const topStoriesResult = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json`);
+        const topStoriesJson = await topStoriesResult.json();
 
-        fetch(`https://hacker-news.firebaseio.com/v0/topstories.json`)
-            .then(res => res.json())
-            .then(json => {
-                this.setState({ topStories: json });
-                var currentItems = this.state.topStories.slice(this.state.currentOffset - this.state.storiesToLoad, this.state.currentOffset);
-                var itemsArray = [];
-                currentItems.forEach(x => {
-                    fetch(`https://hacker-news.firebaseio.com/v0/item/${x}.json`)
-                        .then(res => res.json())
-                        .then(json => {
-                            itemsArray.push(json);
-                    });
-                });
+        var storyDataArray = await Promise.all(topStoriesJson.map(async (x) => {
+            var result = await fetch(`https://hacker-news.firebaseio.com/v0/item/${x}.json`);
+            return result.json();
+        }));
 
-                console.log(itemsArray);
-                this.setState({ storyData: itemsArray });
-
-            });
+        this.setState({topStories: topStoriesJson, storyData: storyDataArray});
+        
     }
 
     render() {
         console.log('render!');
         if( this.state.storyData.length > 0){
-            const list = this.state.storyData.map(story => <SwiperSlide key={story} id={story.id}><div className="hacker-card">{story.title}</div></SwiperSlide> );
+            const list = this.state.storyData.map(story => <SwiperSlide key={story.id} id={story.id}><div className="hacker-card">{story.title}</div></SwiperSlide> );
             console.log('logging list');
             console.log(list);
             return (
                 <div className='sliderContainer'>
-                    
                     <Swiper
                         spaceBetween={50}
                         slidesPerView={1}
@@ -61,7 +48,7 @@ class Slider extends Component{
                         {list}
                     </Swiper>
                 </div>
-    
+
             );
         }
         return("Nothing here")
