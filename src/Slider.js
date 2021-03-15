@@ -25,20 +25,43 @@ class Slider extends Component {
     }
 
     async componentDidMount() {
+        this.getData();
+    }
 
+    slideChange(swiper) {
+        var slideIndex = swiper.activeIndex;
+        if (slideIndex >= (this.state.currentOffset - this.state.storiesToLoad ) - 2){
+            this.getData();
+            swiper.update();
+        }
+        swiper.update();
+    }
+
+    async getData(){
+        this.setState({loading: true});
+        
+        var startIndex = this.state.currentOffset - this.state.storiesToLoad;
+        
         const topStoriesResult = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json`);
         const topStoriesJson = await topStoriesResult.json();
-        const currentStoriesSlice = topStoriesJson.slice(0, this.state.currentOffset);
+        const currentStoriesSlice = topStoriesJson.slice(startIndex, this.state.currentOffset);
 
         var storyDataArray = await Promise.all(currentStoriesSlice.map(async (x) => {
             var result = await fetch(`https://hacker-news.firebaseio.com/v0/item/${x}.json`);
             return result.json();
         }));
+        
+        var currentDataArray = this.state.storyData;
+
+        currentDataArray.push(...storyDataArray);
+
+        var newOffset = this.state.currentOffset + this.state.storiesToLoad;
 
         this.setState({
             topStories: topStoriesJson,
-            storyData: storyDataArray,
+            storyData: currentDataArray,
             currentStoriesSlice: currentStoriesSlice,
+            currentOffset: newOffset,
             loading: false
         });
     }
@@ -56,17 +79,20 @@ class Slider extends Component {
                     var urlParts = story.url.split('/');
                     calculatedUrl = story.url;
                     displayUrl = urlParts[2];
+                } else {
+                    displayUrl = 'news.ycombinator.com';
+                    calculatedUrl = `https://news.ycombinator.com/item?id=${story.id}`;
                 }
 
                 return (
                     <SwiperSlide key={story.id} id={story.id}>
                         <div className="hacker-card">
-                            <div class='story-title'>
-                                <a href={story.url}>
+                            <div className='story-title'>
+                                <a href={calculatedUrl}>
                                     {story.title}
                                 </a>
                             </div>
-                            <div class='story-url'>{displayUrl}</div>
+                            <div className='story-url'>{displayUrl}</div>
                         </div>
                     </SwiperSlide>
                 )
@@ -78,8 +104,8 @@ class Slider extends Component {
                         slidesPerView={1}
                         navigation
                         pagination={{ clickable: true }}
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper) => console.log(swiper)}>
+                        onSlideChange={(swiper) => this.slideChange(swiper)}
+                        direction='vertical'>
                         {list}
                     </Swiper>
                     <div id='loading-icon' className='loading'>
