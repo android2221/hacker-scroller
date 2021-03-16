@@ -57,10 +57,9 @@ class Slider extends Component {
                     return await result.json();
                 }));
             }
+            
+            return {story: story, topComments: topComments}
 
-            var returnObj = {story: story, topComments: topComments}
-
-            return story;
         }));
 
         var currentDataArray = this.state.storyData;
@@ -68,6 +67,8 @@ class Slider extends Component {
         currentDataArray.push(...storyDataArray);
 
         var newOffset = this.state.currentOffset + this.state.storiesToLoad;
+
+        console.log(currentDataArray);
 
         this.setState({
             topStories: topStoriesJson,
@@ -80,7 +81,10 @@ class Slider extends Component {
 
     render() {
         if (this.state.storyData.length > 0) {
-            const list = this.state.storyData.map(story => {
+            const list = this.state.storyData.map(x => {
+                const story = x.story;
+                const topComments = x.topComments;
+
                 // Handle things that don't have a URL
                 // Go to hacker news if not
 
@@ -108,6 +112,9 @@ class Slider extends Component {
                             <div className='story-url'>{displayUrl}</div>
                             <div className='points-info'>
                                 {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
+                            </div>
+                            <div className='top-comments'>
+                                {topComments ? topComments.map(x => <div dangerouslySetInnerHTML={{__html: x.text}}></div>) : 'no comments'}
                             </div>
                             <div className="see-on-hn">
                                 <a href={hnUrl}>See on HN</a>
