@@ -114,7 +114,11 @@ class Slider extends Component {
                                 {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
                             </div>
                             <div className='top-comments'>
-                                {topComments ? topComments.map(x => <div dangerouslySetInnerHTML={{__html: x.text}}></div>) : 'no comments'}
+                                {topComments ? topComments.map(x => 
+                                    <div className="comment">{x.by} said:
+                                        <div className="comment-text" dangerouslySetInnerHTML={{__html: x.text}}></div>
+                                    </div>
+                                    ) : 'no comments'}
                             </div>
                             <div className="see-on-hn">
                                 <a href={hnUrl}>See on HN</a>
