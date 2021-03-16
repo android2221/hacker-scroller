@@ -3,6 +3,7 @@ import SwiperCore, { Navigation, Pagination, Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import React, { Component } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import Moment from 'react-moment';
 
 // Import Swiper styles
 import 'swiper/swiper.scss';
@@ -30,27 +31,38 @@ class Slider extends Component {
 
     slideChange(swiper) {
         var slideIndex = swiper.activeIndex;
-        if (slideIndex >= (this.state.currentOffset - this.state.storiesToLoad ) - 2){
+        if (slideIndex >= (this.state.currentOffset - this.state.storiesToLoad) - 2) {
             this.getData();
             swiper.update();
         }
         swiper.update();
     }
 
-    async getData(){
-        this.setState({loading: true});
-        
+    async getData() {
+        this.setState({ loading: true });
+
         var startIndex = this.state.currentOffset - this.state.storiesToLoad;
-        
+
         const topStoriesResult = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json`);
         const topStoriesJson = await topStoriesResult.json();
         const currentStoriesSlice = topStoriesJson.slice(startIndex, this.state.currentOffset);
 
         var storyDataArray = await Promise.all(currentStoriesSlice.map(async (x) => {
-            var result = await fetch(`https://hacker-news.firebaseio.com/v0/item/${x}.json`);
-            return result.json();
+            var storyResponse = await fetch(`https://hacker-news.firebaseio.com/v0/item/${x}.json`);
+            var story = await storyResponse.json();
+
+            if (story.kids) {
+                var topComments = await Promise.all(story.kids.map(async comment => {
+                    var result = await fetch(`https://hacker-news.firebaseio.com/v0/item/${comment}.json`);
+                    return await result.json();
+                }));
+            }
+
+            var returnObj = {story: story, topComments: topComments}
+
+            return story;
         }));
-        
+
         var currentDataArray = this.state.storyData;
 
         currentDataArray.push(...storyDataArray);
@@ -74,6 +86,7 @@ class Slider extends Component {
 
                 var calculatedUrl;
                 var displayUrl;
+                var hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
 
                 if (story.url) {
                     var urlParts = story.url.split('/');
@@ -93,6 +106,12 @@ class Slider extends Component {
                                 </a>
                             </div>
                             <div className='story-url'>{displayUrl}</div>
+                            <div className='points-info'>
+                                {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
+                            </div>
+                            <div className="see-on-hn">
+                                <a href={hnUrl}>See on HN</a>
+                            </div>
                         </div>
                     </SwiperSlide>
                 )
