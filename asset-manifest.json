@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/hacker-slider/static/css/main.b8f0440b.chunk.css",
+    "main.js": "/hacker-slider/static/js/main.02c68c35.chunk.js",
+    "main.js.map": "/hacker-slider/static/js/main.02c68c35.chunk.js.map",
+    "runtime-main.js": "/hacker-slider/static/js/runtime-main.85e0773e.js",
+    "runtime-main.js.map": "/hacker-slider/static/js/runtime-main.85e0773e.js.map",
+    "static/css/2.01296cc8.chunk.css": "/hacker-slider/static/css/2.01296cc8.chunk.css",
+    "static/js/2.d13cf538.chunk.js": "/hacker-slider/static/js/2.d13cf538.chunk.js",
+    "static/js/2.d13cf538.chunk.js.map": "/hacker-slider/static/js/2.d13cf538.chunk.js.map",
+    "static/js/3.b5aec98f.chunk.js": "/hacker-slider/static/js/3.b5aec98f.chunk.js",
+    "static/js/3.b5aec98f.chunk.js.map": "/hacker-slider/static/js/3.b5aec98f.chunk.js.map",
+    "index.html": "/hacker-slider/index.html",
+    "static/css/2.01296cc8.chunk.css.map": "/hacker-slider/static/css/2.01296cc8.chunk.css.map",
+    "static/css/main.b8f0440b.chunk.css.map": "/hacker-slider/static/css/main.b8f0440b.chunk.css.map",
+    "static/js/2.d13cf538.chunk.js.LICENSE.txt": "/hacker-slider/static/js/2.d13cf538.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.85e0773e.js",
+    "static/css/2.01296cc8.chunk.css",
+    "static/js/2.d13cf538.chunk.js",
+    "static/css/main.b8f0440b.chunk.css",
+    "static/js/main.02c68c35.chunk.js"
+  ]
+}
