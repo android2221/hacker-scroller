@@ -10,7 +10,7 @@ import 'swiper/swiper.scss';
 import './Slider.scss';
 
 // install Swiper modules
-SwiperCore.use([Navigation, Pagination, Virtual]);
+SwiperCore.use([Virtual]);
 
 class Slider extends Component {
     constructor() {
@@ -19,6 +19,7 @@ class Slider extends Component {
             topStories: [],
             storyData: [],
             currentStoriesSlice: [],
+            displayData: [],
             currentOffset: 10,
             storiesToLoad: 10,
             loading: true,
@@ -68,75 +69,75 @@ class Slider extends Component {
 
         var newOffset = this.state.currentOffset + this.state.storiesToLoad;
 
-        console.log(currentDataArray);
+        const displayData = this.state.storyData.map(x => {
+            const story = x.story;
+            const topComments = x.topComments;
+
+            // Handle things that don't have a URL
+            // Go to hacker news if not
+
+            var calculatedUrl;
+            var displayUrl;
+            var hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
+
+            if (story.url) {
+                var urlParts = story.url.split('/');
+                calculatedUrl = story.url;
+                displayUrl = urlParts[2];
+            } else {
+                displayUrl = 'news.ycombinator.com';
+                calculatedUrl = `https://news.ycombinator.com/item?id=${story.id}`;
+            }
+
+            return (
+                <SwiperSlide key={story.id} id={story.id}>
+                    <div className="hacker-card">
+                        <div className='story-title'>
+                            <a href={calculatedUrl}>
+                                {story.title}
+                            </a>
+                        </div>
+                        <div className='story-url'>{displayUrl}</div>
+                        <div className='points-info'>
+                            {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
+                        </div>
+                        <div className='top-comments'>
+                            {topComments ? topComments.map(comment => 
+                                <div className="comment">{comment.by} said:
+                                    <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
+                                </div>
+                                ) : 'no comments'}
+                        </div>
+                        <div className="see-on-hn-overlay">
+                            <div className="see-on-hn">
+                                <a href={hnUrl}>Read on HN</a>
+                            </div>
+                        </div>
+                    </div>
+                </SwiperSlide>
+            )
+        });
 
         this.setState({
             topStories: topStoriesJson,
             storyData: currentDataArray,
             currentStoriesSlice: currentStoriesSlice,
             currentOffset: newOffset,
+            displayData: displayData,
             loading: false
         });
     }
 
     render() {
-        if (this.state.storyData.length > 0) {
-            const list = this.state.storyData.map(x => {
-                const story = x.story;
-                const topComments = x.topComments;
-
-                // Handle things that don't have a URL
-                // Go to hacker news if not
-
-                var calculatedUrl;
-                var displayUrl;
-                var hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
-
-                if (story.url) {
-                    var urlParts = story.url.split('/');
-                    calculatedUrl = story.url;
-                    displayUrl = urlParts[2];
-                } else {
-                    displayUrl = 'news.ycombinator.com';
-                    calculatedUrl = `https://news.ycombinator.com/item?id=${story.id}`;
-                }
-
-                return (
-                    <SwiperSlide key={story.id} id={story.id}>
-                        <div className="hacker-card">
-                            <div className='story-title'>
-                                <a href={calculatedUrl}>
-                                    {story.title}
-                                </a>
-                            </div>
-                            <div className='story-url'>{displayUrl}</div>
-                            <div className='points-info'>
-                                {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
-                            </div>
-                            <div className='top-comments'>
-                                {topComments ? topComments.map(x => 
-                                    <div className="comment">{x.by} said:
-                                        <div className="comment-text" dangerouslySetInnerHTML={{__html: x.text}}></div>
-                                    </div>
-                                    ) : 'no comments'}
-                            </div>
-                            <div className="see-on-hn">
-                                <a href={hnUrl}>See on HN</a>
-                            </div>
-                        </div>
-                    </SwiperSlide>
-                )
-            });
+        if (this.state.displayData.length > 0) {
             return (
                 <div className='slider-container'>
                     <Swiper
                         spaceBetween={50}
                         slidesPerView={1}
-                        navigation
-                        pagination={{ clickable: true }}
                         onSlideChange={(swiper) => this.slideChange(swiper)}
                         direction='vertical'>
-                        {list}
+                        {this.state.displayData}
                     </Swiper>
                     <div id='loading-icon' className='loading'>
                         <ClipLoader size={35} color='black' loading={this.state.loading} />
