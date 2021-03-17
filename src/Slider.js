@@ -33,13 +33,11 @@ class Slider extends Component {
     slideChange(swiper) {
         var slideIndex = swiper.activeIndex;
         if (slideIndex >= (this.state.currentOffset - this.state.storiesToLoad) - 2) {
-            this.getData();
-            swiper.update();
+            this.getData(swiper);
         }
-        swiper.update();
     }
 
-    async getData() {
+    async getData(swiper = null) {
         this.setState({ loading: true });
 
         var startIndex = this.state.currentOffset - this.state.storiesToLoad;
@@ -126,6 +124,10 @@ class Slider extends Component {
             displayData: displayData,
             loading: false
         });
+
+        if (swiper != null){
+            swiper.update();
+        }
     }
 
     render() {
