@@ -97,7 +97,7 @@ class Slider extends Component {
                         </h2>
                         <div className='story-url'>{displayUrl}</div>
                         <div className='points-info'>
-                            {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
+                            {story.score} points by {story.by} | {story.descendants ? story.descendants : 0} comments | <Moment unix fromNow>{story.time}</Moment>
                         </div>
                         <div className='top-comments'>
                             {topComments ? topComments.map(comment => 
@@ -105,7 +105,7 @@ class Slider extends Component {
                                     <div className="comment-by">{comment.by}said:</div>
                                     <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
                                 </div>
-                                ) : 'no comments'}
+                                ) : <div className="no-comments">No comments yet</div>}
                         </div>
                         <div className="see-on-hn-overlay">
                             <div className="see-on-hn">

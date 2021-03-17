@@ -9,7 +9,7 @@
 .hacker-card{
     padding: 20px;
     max-height: 75vh;
-    min-height: 20vh;
+    min-height: 300px;
     margin-left: auto;
     margin-right: auto;
     width: 80%;
@@ -19,12 +19,6 @@
     position: relative;
     overflow: hidden;
     margin-top: 20px;
-}
-
-.top-comments{
-    overflow: hidden;
-    position: relative;
-    height: 100%;
 }
 
 #loading-icon{
@@ -39,6 +33,11 @@
 
 .story-url{
     color: grey;
+}
+
+.story-url,
+.points-info{
+    font-size: 12px;
 }
 
 .see-on-hn-overlay{
@@ -60,6 +59,13 @@
 
 .top-comments{
     text-align: left;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    .no-comments{
+        text-align: center;
+        margin-top: 50px;
+    }
     .comment{
         overflow: scroll;
         padding: 15px 0px;
