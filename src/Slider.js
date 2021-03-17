@@ -89,28 +89,27 @@ class Slider extends Component {
 
             return (
                 <SwiperSlide key={story.id} id={story.id}>
-                    <div className="hacker-card-wrapper">
-                        <div className="hacker-card">
-                            <div className='story-title'>
-                                <a href={calculatedUrl}>
-                                    {story.title}
-                                </a>
-                            </div>
-                            <div className='story-url'>{displayUrl}</div>
-                            <div className='points-info'>
-                                {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
-                            </div>
-                            <div className='top-comments'>
-                                {topComments ? topComments.map(comment => 
-                                    <div className="comment">{comment.by} said:
-                                        <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
-                                    </div>
-                                    ) : 'no comments'}
-                            </div>
-                            <div className="see-on-hn-overlay">
-                                <div className="see-on-hn">
-                                    <a href={hnUrl}>Read on HN</a>
+                    <div className="hacker-card">
+                        <h2 className='story-title'>
+                            <a href={calculatedUrl}>
+                                {story.title}
+                            </a>
+                        </h2>
+                        <div className='story-url'>{displayUrl}</div>
+                        <div className='points-info'>
+                            {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
+                        </div>
+                        <div className='top-comments'>
+                            {topComments ? topComments.map(comment => 
+                                <div className="comment">
+                                    <div className="comment-by">{comment.by}said:</div>
+                                    <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
                                 </div>
+                                ) : 'no comments'}
+                        </div>
+                        <div className="see-on-hn-overlay">
+                            <div className="see-on-hn">
+                                <a href={hnUrl}>Read on HN</a>
                             </div>
                         </div>
                     </div>
