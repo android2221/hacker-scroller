@@ -1,5 +1,5 @@
 // Import Swiper React components
-import SwiperCore, { Navigation, Pagination, Virtual } from 'swiper';
+import SwiperCore, {Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import React, { Component } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -89,26 +89,28 @@ class Slider extends Component {
 
             return (
                 <SwiperSlide key={story.id} id={story.id}>
-                    <div className="hacker-card">
-                        <div className='story-title'>
-                            <a href={calculatedUrl}>
-                                {story.title}
-                            </a>
-                        </div>
-                        <div className='story-url'>{displayUrl}</div>
-                        <div className='points-info'>
-                            {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
-                        </div>
-                        <div className='top-comments'>
-                            {topComments ? topComments.map(comment => 
-                                <div className="comment">{comment.by} said:
-                                    <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
+                    <div className="hacker-card-wrapper">
+                        <div className="hacker-card">
+                            <div className='story-title'>
+                                <a href={calculatedUrl}>
+                                    {story.title}
+                                </a>
+                            </div>
+                            <div className='story-url'>{displayUrl}</div>
+                            <div className='points-info'>
+                                {story.score} points by {story.by} | {story.descendants} comments | <Moment unix fromNow>{story.time}</Moment>
+                            </div>
+                            <div className='top-comments'>
+                                {topComments ? topComments.map(comment => 
+                                    <div className="comment">{comment.by} said:
+                                        <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
+                                    </div>
+                                    ) : 'no comments'}
+                            </div>
+                            <div className="see-on-hn-overlay">
+                                <div className="see-on-hn">
+                                    <a href={hnUrl}>Read on HN</a>
                                 </div>
-                                ) : 'no comments'}
-                        </div>
-                        <div className="see-on-hn-overlay">
-                            <div className="see-on-hn">
-                                <a href={hnUrl}>Read on HN</a>
                             </div>
                         </div>
                     </div>
@@ -135,10 +137,9 @@ class Slider extends Component {
             return (
                 <div className='slider-container'>
                     <Swiper
-                        spaceBetween={50}
-                        slidesPerView={1}
                         onSlideChange={(swiper) => this.slideChange(swiper)}
-                        direction='vertical'>
+                        direction='vertical'
+                        slidesPerView={1}>
                         {this.state.displayData}
                     </Swiper>
                     <div id='loading-icon' className='loading'>
