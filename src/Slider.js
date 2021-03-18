@@ -18,15 +18,24 @@ class Slider extends Component {
     }
 
     async componentDidMount() {
-        this.getData();
+        await this.getData();
+        document.addEventListener('scroll', this.trackScrolling);
     }
 
-    // slideChange(swiper) {
-    //     var slideIndex = swiper.activeIndex;
-    //     if (slideIndex >= (this.state.currentOffset - this.state.storiesToLoad) - 2) {
-    //         this.getData(swiper);
-    //     }
-    // }
+    componentWillUnmount() {
+        document.removeEventListener('scroll', this.trackScrolling);
+    }
+
+    trackScrolling = async () => {
+        const wrappedElement = document.getElementById('bottom-element');
+        if (this.isBottom(wrappedElement)) {
+            await this.getData();
+        }
+    };
+
+    isBottom(el) {
+        return el.getBoundingClientRect().bottom <= (window.innerHeight + 1);
+    }
 
     async getData() {
         this.setState({ loading: true });
@@ -40,15 +49,14 @@ class Slider extends Component {
         var storyDataArray = await Promise.all(currentStoriesSlice.map(async (x) => {
             var storyResponse = await fetch(`https://hacker-news.firebaseio.com/v0/item/${x}.json`);
             var story = await storyResponse.json();
-
             if (story.kids) {
                 var topComments = await Promise.all(story.kids.map(async comment => {
                     var result = await fetch(`https://hacker-news.firebaseio.com/v0/item/${comment}.json`);
                     return await result.json();
                 }));
             }
-            
-            return {story: story, topComments: topComments}
+
+            return { story: story, topComments: topComments }
 
         }));
 
@@ -58,53 +66,59 @@ class Slider extends Component {
 
         var newOffset = this.state.currentOffset + this.state.storiesToLoad;
 
-        const displayData = this.state.storyData.map(x => {
-            const story = x.story;
-            const topComments = x.topComments;
+        var displayData = [];
 
-            // Handle things that don't have a URL
-            // Go to hacker news if not
+        if (this.state.storyData !== undefined) {
+            displayData = this.state.storyData.map((x, index) => {
+                const story = x.story;
+                const topComments = x.topComments;
 
-            var calculatedUrl;
-            var displayUrl;
-            var hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
+                // Handle things that don't have a URL
+                // Go to hacker news if not
 
-            if (story.url) {
-                var urlParts = story.url.split('/');
-                calculatedUrl = story.url;
-                displayUrl = urlParts[2];
-            } else {
-                displayUrl = 'news.ycombinator.com';
-                calculatedUrl = `https://news.ycombinator.com/item?id=${story.id}`;
-            }
+                var calculatedUrl;
+                var displayUrl;
+                var hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
 
-            return (
-                <div className="hacker-card" key={story.id}>
-                    <h2 className='story-title'>
-                        <a href={calculatedUrl}>
-                            {story.title}
-                        </a>
-                    </h2>
-                    <div className='story-url'>{displayUrl}</div>
-                    <div className='points-info'>
-                        {story.score} points by {story.by} | {story.descendants ? story.descendants : 0} comments | <Moment unix fromNow>{story.time}</Moment>
-                    </div>
-                    <div className='top-comments'>
-                        {topComments ? topComments.map((comment, index) => 
-                            <div className="comment" key={index}>
-                                <div className="comment-by">{comment.by} said:</div>
-                                <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
-                            </div>
+                if (story.url) {
+                    var urlParts = story.url.split('/');
+                    calculatedUrl = story.url;
+                    displayUrl = urlParts[2];
+                } else {
+                    displayUrl = 'news.ycombinator.com';
+                    calculatedUrl = `https://news.ycombinator.com/item?id=${story.id}`;
+                }
+
+                return (
+                    <div className="hacker-card" key={index}>
+                        <h2 className='story-title'>
+                            <a href={calculatedUrl}>
+                                {story.title}
+                            </a>
+                        </h2>
+                        <div className='story-url'>{displayUrl}</div>
+                        <div className='points-info'>
+                            {story.score} points by {story.by} | {story.descendants ? story.descendants : 0} comments | <Moment unix fromNow>{story.time}</Moment>
+                        </div>
+                        <div className='top-comments'>
+                            {topComments !== undefined ? topComments.map((comment, index) =>
+                                <div className="comment" key={index}>
+                                    <div className="comment-by">{comment.by} said:</div>
+                                    <div className="comment-text" dangerouslySetInnerHTML={{ __html: comment.text }}></div>
+                                </div>
                             ) : <div className="no-comments">No comments yet</div>}
-                    </div>
-                    <div className="see-on-hn-overlay">
-                        <div className="see-on-hn">
-                            <a href={hnUrl}>Read on HN</a>
+                        </div>
+                        <div className="see-on-hn-overlay">
+                            <div className="see-on-hn">
+                                <a href={hnUrl}>Read on HN</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )
-        });
+                )
+            });
+        }
+
+
 
         this.setState({
             topStories: topStoriesJson,
@@ -116,11 +130,13 @@ class Slider extends Component {
         });
     }
 
+
     render() {
         if (this.state.displayData.length > 0) {
             return (
                 <div className='slider-container'>
                     {this.state.displayData}
+                    <div id="bottom-element"></div>
                     <div id='loading-icon' className='loading'>
                         <ClipLoader size={35} color='black' loading={this.state.loading} />
                     </div>
