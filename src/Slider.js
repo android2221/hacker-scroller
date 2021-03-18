@@ -1,16 +1,7 @@
-// Import Swiper React components
-import SwiperCore, {Virtual } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import React, { Component } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import Moment from 'react-moment';
-
-// Import Swiper styles
-import 'swiper/swiper.scss';
 import './Slider.scss';
-
-// install Swiper modules
-SwiperCore.use([Virtual]);
 
 class Slider extends Component {
     constructor() {
@@ -30,14 +21,14 @@ class Slider extends Component {
         this.getData();
     }
 
-    slideChange(swiper) {
-        var slideIndex = swiper.activeIndex;
-        if (slideIndex >= (this.state.currentOffset - this.state.storiesToLoad) - 2) {
-            this.getData(swiper);
-        }
-    }
+    // slideChange(swiper) {
+    //     var slideIndex = swiper.activeIndex;
+    //     if (slideIndex >= (this.state.currentOffset - this.state.storiesToLoad) - 2) {
+    //         this.getData(swiper);
+    //     }
+    // }
 
-    async getData(swiper = null) {
+    async getData() {
         this.setState({ loading: true });
 
         var startIndex = this.state.currentOffset - this.state.storiesToLoad;
@@ -88,32 +79,30 @@ class Slider extends Component {
             }
 
             return (
-                <SwiperSlide key={story.id} id={story.id}>
-                    <div className="hacker-card">
-                        <h2 className='story-title'>
-                            <a href={calculatedUrl}>
-                                {story.title}
-                            </a>
-                        </h2>
-                        <div className='story-url'>{displayUrl}</div>
-                        <div className='points-info'>
-                            {story.score} points by {story.by} | {story.descendants ? story.descendants : 0} comments | <Moment unix fromNow>{story.time}</Moment>
-                        </div>
-                        <div className='top-comments'>
-                            {topComments ? topComments.map(comment => 
-                                <div className="comment">
-                                    <div className="comment-by">{comment.by}said:</div>
-                                    <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
-                                </div>
-                                ) : <div className="no-comments">No comments yet</div>}
-                        </div>
-                        <div className="see-on-hn-overlay">
-                            <div className="see-on-hn">
-                                <a href={hnUrl}>Read on HN</a>
+                <div className="hacker-card" key={story.id}>
+                    <h2 className='story-title'>
+                        <a href={calculatedUrl}>
+                            {story.title}
+                        </a>
+                    </h2>
+                    <div className='story-url'>{displayUrl}</div>
+                    <div className='points-info'>
+                        {story.score} points by {story.by} | {story.descendants ? story.descendants : 0} comments | <Moment unix fromNow>{story.time}</Moment>
+                    </div>
+                    <div className='top-comments'>
+                        {topComments ? topComments.map((comment, index) => 
+                            <div className="comment" key={index}>
+                                <div className="comment-by">{comment.by} said:</div>
+                                <div className="comment-text" dangerouslySetInnerHTML={{__html: comment.text}}></div>
                             </div>
+                            ) : <div className="no-comments">No comments yet</div>}
+                    </div>
+                    <div className="see-on-hn-overlay">
+                        <div className="see-on-hn">
+                            <a href={hnUrl}>Read on HN</a>
                         </div>
                     </div>
-                </SwiperSlide>
+                </div>
             )
         });
 
@@ -125,22 +114,13 @@ class Slider extends Component {
             displayData: displayData,
             loading: false
         });
-
-        if (swiper != null){
-            swiper.update();
-        }
     }
 
     render() {
         if (this.state.displayData.length > 0) {
             return (
                 <div className='slider-container'>
-                    <Swiper
-                        onSlideChange={(swiper) => this.slideChange(swiper)}
-                        direction='vertical'
-                        slidesPerView={1}>
-                        {this.state.displayData}
-                    </Swiper>
+                    {this.state.displayData}
                     <div id='loading-icon' className='loading'>
                         <ClipLoader size={35} color='black' loading={this.state.loading} />
                     </div>
