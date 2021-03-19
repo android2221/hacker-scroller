@@ -45,7 +45,6 @@ class Slider extends Component {
 
     async getData() {
         this.setState({ loading: true });
-
         var startIndex = this.state.currentOffset - this.state.storiesToLoad;
 
         const topStoriesResult = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json`);
@@ -125,8 +124,6 @@ class Slider extends Component {
             });
         }
 
-
-
         this.setState({
             topStories: topStoriesJson,
             storyData: currentDataArray,
@@ -144,8 +141,10 @@ class Slider extends Component {
                 <div className='slider-container'>
                     {this.state.displayData}
                     <div id="bottom-element"></div>
-                    <div id='loading-icon' className='loading'>
-                        <ClipLoader size={35} color='black' loading={this.state.loading} />
+                    <div id='loading-icon-container'>
+                        <div id='loading-icon' className="loading">
+                            <ClipLoader size={35} color='black' loading={this.state.loading} />
+                        </div>
                     </div>
                 </div>
             );
