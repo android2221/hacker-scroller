@@ -55,7 +55,7 @@ class Scroller extends Component {
             var storyResponse = await fetch(`https://hacker-news.firebaseio.com/v0/item/${x}.json`);
             var story = await storyResponse.json();
             if (story.kids) {
-                var topComments = await Promise.all(story.kids.map(async comment => {
+                var topComments = await Promise.all(story.kids.slice(0, 10).map(async comment => {
                     var result = await fetch(`https://hacker-news.firebaseio.com/v0/item/${comment}.json`);
                     return await result.json();
                 }));
