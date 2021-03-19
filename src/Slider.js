@@ -101,6 +101,7 @@ class Slider extends Component {
                             {story.score} points by {story.by} | {story.descendants ? story.descendants : 0} comments | <Moment unix fromNow>{story.time}</Moment>
                         </div>
                         <div className='top-comments'>
+                            <h3>Top Comments</h3>
                             {topComments !== undefined ? topComments.map((comment, index) =>
                                 <div className="comment" key={index}>
                                     <div className="comment-by">{comment.by} said:</div>
