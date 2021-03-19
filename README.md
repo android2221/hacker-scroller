@@ -6,7 +6,7 @@ A mobile friendly hacker news reader built with React. Open source and ad free. 
 
 
 ## Installing and running locally
-This project was started with create-react-app and we are using their basic build configs, which includes hot-reloading for local development. Use this to get started:
+This project was started with create-react-app and uses it's basic build configs, which includes hot-reloading for local development. Use this to get started:
 ```
 git clone git@github.com:android2221/hacker-scroller.git
 cd hacker-scroller
