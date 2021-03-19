@@ -15,11 +15,15 @@ class Slider extends Component {
             storiesToLoad: 10,
             loading: true,
         }
+        this.mounted = false;
     }
 
     async componentDidMount() {
-        await this.getData();
-        document.addEventListener('scroll', this.trackScrolling);
+        this.mounted = true;
+        if (this.mounted){
+            await this.getData(); 
+            document.addEventListener('scroll', this.trackScrolling);
+        }
     }
 
     componentWillUnmount() {
@@ -29,7 +33,9 @@ class Slider extends Component {
     trackScrolling = async () => {
         const wrappedElement = document.getElementById('bottom-element');
         if (this.isBottom(wrappedElement)) {
-            await this.getData();
+            if (!this.state.loading){
+                await this.getData();
+            }
         }
     };
 
