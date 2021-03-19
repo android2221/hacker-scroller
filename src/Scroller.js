@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import Moment from 'react-moment';
-import './Slider.scss';
+import './Scroller.scss';
 
-class Slider extends Component {
+class Scroller extends Component {
     constructor() {
         super();
         this.state = {
@@ -138,7 +138,7 @@ class Slider extends Component {
     render() {
         if (this.state.displayData.length > 0) {
             return (
-                <div className='slider-container'>
+                <div className='scroller-container'>
                     {this.state.displayData}
                     <div id="bottom-element"></div>
                     <div id='loading-icon-container'>
@@ -157,4 +157,4 @@ class Slider extends Component {
     }
 }
 
-export default Slider;
+export default Scroller;

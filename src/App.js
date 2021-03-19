@@ -1,10 +1,10 @@
-import Slider from './Slider';
+import Scroller from './Scroller';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Slider></Slider>
+      <Scroller></Scroller>
     </div>
   );
 }

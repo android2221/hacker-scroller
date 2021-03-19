@@ -1,8 +1,8 @@
 {
-  "name": "hacker-slider",
+  "name": "hacker-scroller",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://android2221.github.io/hacker-slider/",
+  "homepage": "https://android2221.github.io/hacker-scroller/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
