@@ -1,0 +1,27 @@
+#header{
+  height: 45px;
+  background-color: rgb(255, 102, 0);
+  position: relative;
+  .site-name{
+    font-size: 18px;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    position: absolute;
+    left: 10px;
+    font-weight: bold;
+    color: white;
+  }
+  .about{
+    float: right;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 10px;
+    a{
+      color: white;
+      line-height: 14px;
+    }
+  }
+}
