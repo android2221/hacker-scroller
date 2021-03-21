@@ -91,11 +91,11 @@ class Scroller extends Component {
                     displayUrl = urlParts[2];
                 } else {
                     displayUrl = 'news.ycombinator.com';
-                    calculatedUrl = `https://news.ycombinator.com/item?id=${story.id}`;
+                    calculatedUrl = hnUrl;
                 }
 
                 return (
-                    <div className="hacker-card" key={index}>
+                    <div className={"hacker-card" + " " + story.type} key={index}>
                         <h2 className='story-title'>
                             <a href={calculatedUrl}>
                                 {story.title}
@@ -105,20 +105,26 @@ class Scroller extends Component {
                         <div className='points-info'>
                             {story.score} points by {story.by} | {story.descendants ? story.descendants : 0} comments | <Moment unix fromNow>{story.time}</Moment>
                         </div>
-                        <div className='top-comments'>
+                        { (story.type !== 'job') &&
+                            <div className='top-comments'>
                             {topComments !== undefined ? <h3>Top Comments</h3> : ''}
                             {topComments !== undefined ? topComments.map((comment, index) =>
                                 <div className="comment" key={index}>
                                     <div className="comment-by">{comment.by} said:</div>
                                     <div className="comment-text" dangerouslySetInnerHTML={{ __html: comment.text }}></div>
                                 </div>
-                            ) : <div className="no-comments">No comments yet</div>}
-                        </div>
-                        <div className="see-on-hn-overlay">
-                            <div className="see-on-hn">
-                                <a href={hnUrl}>Read on HN</a>
+                                ) : <div className="no-comments">No comments yet</div>}
                             </div>
-                        </div>
+                        }
+
+                        {
+                            (story.type !== 'job') &&
+                            <div className="see-on-hn-overlay">
+                                <div className="see-on-hn">
+                                    <a href={hnUrl}>Read on HN</a>
+                                </div>
+                            </div>
+                        }
                     </div>
                 )
             });

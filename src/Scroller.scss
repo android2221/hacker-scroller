@@ -19,6 +19,9 @@
     position: relative;
     margin-top: 20px;
     margin-bottom: 20px;
+    &.job{
+        padding-bottom: 40px;
+    }
 }
 
 #loading-icon-container{
