@@ -13,7 +13,12 @@ class HackerCard extends Component {
                 </h2>
                 <div className='story-url'>{this.props.displayUrl}</div>
                 <div className='points-info'>
-                    {this.props.story.score} points by {this.props.story.by} | {this.props.story.descendants ? this.props.story.descendants : 0} comments | <Moment unix fromNow>{this.props.story.time}</Moment>
+                    <span>{this.props.story.score} points by {this.props.story.by} </span>
+                    <span id="comment-count">
+                        | {this.props.story.descendants ? this.props.story.descendants : 0} comments 
+                    </span>
+                    <span> | <Moment unix fromNow>{this.props.story.time}</Moment></span>
+                      
                 </div>
                 { (this.props.story.type !== 'job') &&
                     <div className='top-comments'>

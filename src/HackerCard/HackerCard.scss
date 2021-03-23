@@ -12,6 +12,9 @@
     margin-bottom: 20px;
     &.job{
         padding-bottom: 40px;
+        & #comment-count{
+            display: none;
+        }
     }
 }
 
