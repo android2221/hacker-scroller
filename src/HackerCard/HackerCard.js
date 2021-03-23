@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import Moment from 'react-moment';
+import './HackerCard.scss';
 
 class HackerCard extends Component {
     render() {
         return (
             <div className={"hacker-card" + " " + this.props.story.type} key={this.props.index}>
-                <h2 className='this.props.story-title'>
+                <h2 className='story-title'>
                     <a href={this.props.calculatedUrl}>
                         {this.props.story.title}
                     </a>
                 </h2>
-                <div className='this.props.story-url'>{this.props.displayUrl}</div>
+                <div className='story-url'>{this.props.displayUrl}</div>
                 <div className='points-info'>
                     {this.props.story.score} points by {this.props.story.by} | {this.props.story.descendants ? this.props.story.descendants : 0} comments | <Moment unix fromNow>{this.props.story.time}</Moment>
                 </div>

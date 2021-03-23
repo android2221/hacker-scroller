@@ -20,14 +20,17 @@ class Scroller extends Component {
 
     async componentDidMount() {
         this.mounted = true;
+        const bottomElement = document.getElementById('bottom-element');
         if (this.mounted) {
-            await this.getData();
-            document.addEventListener('scroll', this.trackScrolling);
+            document.addEventListener('scroll', this.trackScrolling(bottomElement));
+            var stateData = await this.getData();
+            this.setState(stateData);
         }
     }
 
     componentWillUnmount() {
-        document.removeEventListener('scroll', this.trackScrolling);
+        const bottomElement = document.getElementById('bottom-element');
+        document.removeEventListener('scroll', this.trackScrolling(bottomElement));
     }
 
     async getData() {
@@ -59,7 +62,7 @@ class Scroller extends Component {
 
         var newOffset = this.state.currentOffset + this.state.storiesToLoad;
 
-        this.setState({
+        return ({
             storyData: currentDataArray,
             currentOffset: newOffset,
             loading: false
@@ -104,8 +107,7 @@ class Scroller extends Component {
         return hackerCardData;
     }
 
-    trackScrolling = async () => {
-        const wrappedElement = document.getElementById('bottom-element');
+    trackScrolling = async (wrappedElement) => {
         if (this.isBottom(wrappedElement)) {
             if (!this.state.loading) {
                 await this.getData();
