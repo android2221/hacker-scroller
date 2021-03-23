@@ -5,7 +5,7 @@ import './HackerCard.scss';
 class HackerCard extends Component {
     render() {
         return (
-            <div className={"hacker-card" + " " + this.props.story.type} key={this.props.index}>
+            <div className={"hacker-card " + this.props.story.type} key={this.props.index}>
                 <h2 className='story-title'>
                     <a href={this.props.calculatedUrl}>
                         {this.props.story.title}

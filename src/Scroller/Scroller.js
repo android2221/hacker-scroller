@@ -20,17 +20,15 @@ class Scroller extends Component {
 
     async componentDidMount() {
         this.mounted = true;
-        const bottomElement = document.getElementById('bottom-element');
         if (this.mounted) {
-            document.addEventListener('scroll', this.trackScrolling(bottomElement));
             var stateData = await this.getData();
             this.setState(stateData);
+            document.addEventListener('scroll', this.trackScrolling);
         }
     }
 
     componentWillUnmount() {
-        const bottomElement = document.getElementById('bottom-element');
-        document.removeEventListener('scroll', this.trackScrolling(bottomElement));
+        document.removeEventListener('scroll', this.trackScrolling);
     }
 
     async getData() {
@@ -100,17 +98,19 @@ class Scroller extends Component {
                 };
 
                 return (
-                    <HackerCard {...hackerCardProps} />
+                    <HackerCard key={index} {...hackerCardProps} />
                 );
             });
         }
         return hackerCardData;
     }
 
-    trackScrolling = async (wrappedElement) => {
+    trackScrolling = async () => {
+        var wrappedElement = document.getElementById('bottom-element');
         if (this.isBottom(wrappedElement)) {
             if (!this.state.loading) {
-                await this.getData();
+                var stateData = await this.getData();
+                this.setState(stateData);
             }
         }
     };
