@@ -40,11 +40,13 @@ class Scroller extends Component {
         const topStoriesJson = await topStoriesResult.json();
         const currentStoriesSlice = topStoriesJson.slice(startIndex, this.state.currentOffset);
 
+        var topComments = [];
+
         var storyDataArray = await Promise.all(currentStoriesSlice.map(async (x) => {
             var storyResponse = await fetch(`${this.hnBaseUrl}item/${x}.json`);
             var story = await storyResponse.json();
             if (story.kids) {
-                var topComments = await Promise.all(story.kids.slice(0, 10).map(async comment => {
+                topComments = await Promise.all(story.kids.slice(0, 10).map(async comment => {
                     var result = await fetch(`${this.hnBaseUrl}item/${comment}.json`);
                     return await result.json();
                 }));
@@ -52,10 +54,9 @@ class Scroller extends Component {
 
             // remove deleted comments
             var editedComments = [];
-
-            if(topComments){
+            if(topComments.length > 0){
                 topComments.forEach(x =>{
-                    if (!x.deleted){
+                    if (x !== null || x !== undefined || !x.deleted){
                         editedComments.push(x);
                     }
                 });
