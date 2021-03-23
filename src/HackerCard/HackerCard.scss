@@ -70,6 +70,9 @@
         overflow: scroll;
         padding: 15px 0px;
         border-bottom: 1px solid grey;
+        &:last-of-type{
+            border-bottom: none;
+        }
     }
     .comment-by{
         font-weight: bold;
