@@ -1,11 +1,3 @@
-.swiper-button-prev,
-.swiper-button-next{
-    background-color: blue;
-    width: 20px;
-    height: 20px;
-    margin-bottom: 20px;
-}
-
 .hacker-card{
     overflow: hidden;
     padding: 20px;
@@ -20,30 +12,6 @@
     margin-bottom: 20px;
     &.job{
         padding-bottom: 40px;
-    }
-}
-
-#loading-icon-container{
-    background: white;
-    background: linear-gradient(0deg, white 75%, rgba(255, 255, 255, 0) 100%);
-    z-index: 99;
-    bottom: 0px;
-    position: fixed;
-    width: 100%;
-}
-
-#loading-icon{
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 100;
-    width: 100%;
-    :first-child{
-        margin-top: 50px;
-        margin-bottom: 30px;
     }
 }
 
@@ -68,8 +36,8 @@
 
 .see-on-hn-overlay{
     background: rgb(255,255,255);
-    background: linear-gradient(0deg, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
-    height: 110px;
+    background: linear-gradient(0deg, rgba(255,255,255,1) 55%, rgba(255,255,255,0) 100%);
+    height: 90px;
     position: absolute;
     bottom: 0px;
     width: 100%;
@@ -102,6 +70,9 @@
         overflow: scroll;
         padding: 15px 0px;
         border-bottom: 1px solid grey;
+        &:last-of-type{
+            border-bottom: none;
+        }
     }
     .comment-by{
         font-weight: bold;

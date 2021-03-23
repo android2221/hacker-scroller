@@ -1,4 +1,4 @@
-import Scroller from './Scroller';
+import Scroller from './Scroller/Scroller';
 import './App.scss';
 
 function App() {
