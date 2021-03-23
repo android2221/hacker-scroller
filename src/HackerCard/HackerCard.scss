@@ -68,6 +68,7 @@
     }
     .comment{
         overflow: scroll;
+        overflow-y: auto;
         padding: 15px 0px;
         border-bottom: 1px solid grey;
         &:last-of-type{
