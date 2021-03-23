@@ -50,7 +50,18 @@ class Scroller extends Component {
                 }));
             }
 
-            return { story: story, topComments: topComments }
+            // remove deleted comments
+            var editedComments = [];
+
+            if(topComments){
+                topComments.forEach(x =>{
+                    if (!x.deleted){
+                        editedComments.push(x);
+                    }
+                });
+            }
+
+            return { story: story, topComments: editedComments }
 
         }));
 
