@@ -17,8 +17,8 @@ class HackerCard extends Component {
                 </div>
                 { (this.props.story.type !== 'job') &&
                     <div className='top-comments'>
-                        {this.props.topComments !== undefined ? <h3>Top Comments</h3> : ''}
-                        {this.props.topComments !== undefined ? this.props.topComments.map((comment, index) =>
+                        {(this.props.topComments !== undefined && this.props.topComments.length > 0) ? <h3>Top Comments</h3> : ''}
+                        {(this.props.topComments !== undefined && this.props.topComments.length > 0) ? this.props.topComments.map((comment, index) =>
                             <div className="comment" key={index}>
                                 <div className="comment-by">{comment.by} said:</div>
                                 <div className="comment-text" dangerouslySetInnerHTML={{ __html: comment.text }}></div>
