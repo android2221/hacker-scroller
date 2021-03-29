@@ -1,6 +1,6 @@
 # Hacker Scroller
 
-A mobile friendly hacker news reader built with React hosted on GitHub Pages. Open source and ad free. Accepting pull requests.
+A mobile friendly hacker news reader built with React hosted on GitHub Pages. Open source and ad free. Feel free to file issues and pull requests.
 
 <b>Check it out here: [hacker-scroller.com](https://hacker-scroller.com)</b>
 
