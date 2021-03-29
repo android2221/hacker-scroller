@@ -32,17 +32,29 @@ class Scroller extends Component {
     }
 
     async getData() {
-        this.setState({ loading: true });
+        if (this.state.loading !== true) {
+            this.setState({ loading: true });
+        }
 
         var startIndex = this.state.currentOffset - this.state.storiesToLoad;
 
-        const topStoriesResult = await fetch(`${this.hnBaseUrl}topstories.json`);
-        const topStoriesJson = await topStoriesResult.json();
-        const currentStoriesSlice = topStoriesJson.slice(startIndex, this.state.currentOffset);
+        // pack current state into object, or get new info and work from here
+        var workingStateObject = {};
+
+        if (this.state.topStories.length === 0) {
+            const topStoriesResult = await fetch(`${this.hnBaseUrl}topstories.json`);
+            const topStoriesJson = await topStoriesResult.json();
+            const currentStoriesSlice = topStoriesJson.slice(startIndex, this.state.currentOffset);
+            workingStateObject.topStories = topStoriesJson;
+            workingStateObject.currentStoriesSlice = currentStoriesSlice;
+        } else {
+            workingStateObject.topStories = this.state.topStories;
+            workingStateObject.currentStoriesSlice = workingStateObject.topStories.slice(startIndex, this.state.currentOffset)
+        }
 
         var topComments = [];
 
-        var storyDataArray = await Promise.all(currentStoriesSlice.map(async (x) => {
+        var storyDataArray = await Promise.all(workingStateObject.currentStoriesSlice.map(async (x) => {
             var storyResponse = await fetch(`${this.hnBaseUrl}item/${x}.json`);
             var story = await storyResponse.json();
             if (story.kids) {
@@ -54,11 +66,12 @@ class Scroller extends Component {
 
             // remove deleted comments
             var editedComments = [];
-            if(topComments.length > 0){
-                topComments.forEach(x =>{
-                    if (x !== null || x !== undefined || !x.deleted){
-                        editedComments.push(x);
+            if (topComments.length > 0) {
+                topComments.forEach(x => {
+                    if (x === null || x === undefined || ('deleted' in x && x.deleted === true)) {
+                        return;
                     }
+                    editedComments.push(x);
                 });
             }
 
@@ -66,13 +79,16 @@ class Scroller extends Component {
 
         }));
 
+        // create new story data array, tack data on to the end of it
         var currentDataArray = Object.assign([], this.state.storyData);
-
         currentDataArray.push(...storyDataArray);
 
+        // calculate new offset
         var newOffset = this.state.currentOffset + this.state.storiesToLoad;
 
         return ({
+            topStories: workingStateObject.topStories,
+            currentStoriesSlice: workingStateObject.currentStoriesSlice,
             storyData: currentDataArray,
             currentOffset: newOffset,
             loading: false
@@ -80,7 +96,7 @@ class Scroller extends Component {
     }
 
     createHackerCards() {
-        if (this.state.storyData !== undefined) {
+        if (this.state.storyData !== undefined && this.state.storyData.length > 0) {
             var hackerCardData = this.state.storyData.map((x, index) => {
                 const story = x.story;
                 const topComments = x.topComments;
@@ -134,7 +150,7 @@ class Scroller extends Component {
     render() {
         var hackerCards = this.createHackerCards();
 
-        if (hackerCards !== undefined) {
+        if (hackerCards !== undefined && hackerCards.length > 0) {
             return (
                 <div className='scroller-container'>
                     {hackerCards}
