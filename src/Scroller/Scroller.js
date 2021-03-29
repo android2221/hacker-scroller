@@ -56,9 +56,10 @@ class Scroller extends Component {
             var editedComments = [];
             if(topComments.length > 0){
                 topComments.forEach(x =>{
-                    if (x !== null || x !== undefined || !x.deleted){
-                        editedComments.push(x);
+                    if (x === null || x === undefined || ('deleted' in x && x.deleted === true)){
+                        return;
                     }
+                    editedComments.push(x);
                 });
             }
 
